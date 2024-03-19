@@ -2,7 +2,7 @@ const HID = require('node-hid')
 let connectKbd = {}
 let kbd = {}
 
-const commandToBytes = exports.commandToBytes = (command) => command.data ? [0, command.id].concat(command.data) : [0, command.id]
+const commandToBytes = (command) => command.data ? [0, command.id].concat(command.data) : [0, command.id]
 
 const DEFAULT_USAGE = {
     usage: 0x61,
