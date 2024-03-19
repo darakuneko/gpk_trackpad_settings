@@ -1,0 +1,69 @@
+{
+  "license": "MIT",
+  "scripts": {
+    "build": "rm -rf ./public/build && rm -rf ./build && rm -rf ./dist && npx webpack",
+    "build:win": "del /s /q public\\build && del /s /q build && del /s /q dist && npx webpack",
+    "start": "npx webpack && npx electron .",
+    "dist:win": "npm run build:win && electron-builder -w",
+    "dist:mac": "npm run build  && electron-builder -m",
+    "dist:linux": "npm run build && electron-builder -l"
+  },
+  "name": "gpk_trackpad_settings",
+  "version": "1.0.0",
+  "description": "GPK Trackpad Settings",
+  "homepage": "https://github.com/darakuneko",
+  "author": {
+    "name": "darakuneko",
+    "email": "tvkids@gmail.com"
+  },
+  "devDependencies": {
+    "electron": "29.0.1",
+    "electron-builder": "24.12.0",
+    "webpack-cli": "5.1.4"
+  },
+  "main": "./index.js",
+  "dependencies": {
+    "@babel/core": "7.23.9",
+    "@babel/preset-env": "7.23.9",
+    "@babel/preset-react": "7.23.3",
+    "@emotion/babel-preset-css-prop": "11.11.0",
+    "@emotion/react": "11.11.3",
+    "@emotion/styled": "11.11.0",
+    "@mui/icons-material": "5.15.10",
+    "@mui/material": "5.15.10",
+    "babel-loader": "9.1.3",
+    "node-hid": "3.0.0",
+    "node-loader": "2.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "webpack": "5.90.3"
+  },
+  "build": {
+    "productName": "GPK Trackpad Settings",
+    "appId": "app.darakuneko.gpk_trackpad_settings",
+    "npmRebuild": false,
+    "files": [
+      "public/**/*",
+      "icons/*",
+      "index.js",
+      "preload.js",
+      "gpkrc.js",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icons/256x256.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "icons/512x512.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "icons"
+    }
+  }
+}
