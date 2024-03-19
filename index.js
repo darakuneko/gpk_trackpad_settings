@@ -42,11 +42,7 @@ app.on('window-all-closed', () => {
     }
 })
 app.on('ready', () => {
-    if (process.platform === 'darwin') app.dock.hide()
     createWindow()
-    mainWindow.show()
-    mainWindow.focus()
-    mainWindow.webContents.send("mainWindowShow", true)
     //mainWindow.webContents.openDevTools()
 })
 
