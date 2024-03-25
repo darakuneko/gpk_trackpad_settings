@@ -81,7 +81,6 @@ const SettingEdit = ((props) => {
                                     onChange={handleChange("can_reverse_scrolling_direction", device.id)}
                                     checked={device.config.can_reverse_scrolling_direction === 1}
                                 />}
-                                label="Top"
                                 labelPlacement="top"
                                 label="Reverse Scrolling Direction"/>
                         </Box>
@@ -134,7 +133,6 @@ const SettingEdit = ((props) => {
                                     onChange={handleChange("can_drag", device.id)}
                                     checked={device.config.can_drag === 1}
                                 />}
-                                label="Top"
                                 labelPlacement="top"
                                 label="Drag&Drop"/>
                         </Box>
@@ -194,7 +192,6 @@ const SettingEdit = ((props) => {
                                     onChange={handleChange("can_hf_for_layer", device.id)}
                                     checked={device.config.can_hf_for_layer === 1}
                                 />}
-                                label="Top"
                                 labelPlacement="top"
                                 label="Layer move Haptic"/>
                         </Box>
@@ -381,7 +378,6 @@ const SettingEdit = ((props) => {
                                         onChange={handleChange("can_trackpad_layer", device.id)}
                                         checked={device.config.can_trackpad_layer === 1}
                                     />}
-                                    label="Top"
                                     labelPlacement="top"
                                     label="TrackPad Layer"/>
                             </Box>
