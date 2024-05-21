@@ -10,10 +10,24 @@ const command = {
     changeConnectDevice: (dat) => ipcRenderer.send("changeConnectDevice", dat),
     getConnectKbd: async (id) => await ipcRenderer.invoke('getConnectKbd', id),
     getConfig: async (device) => await ipcRenderer.invoke('getConfig', device),
-    sendDeviceConfig: async (data) => await ipcRenderer.invoke('sendDeviceConfig', data),
+    sendDeviceConfig: async (data) => {
+        await ipcRenderer.invoke('sendDeviceConfig', data)
+        connectDevices = await Promise.all(connectDevices.map( (cd) => {
+            if(data.id === cd.id &&
+                data.manufacturer === cd.manufacturer &&
+                data.product === cd.product &&
+                data.productId === cd.productId &&
+                data.vendorId === cd.vendorId){
+                return data
+            }
+            return cd
+        }))
+    },
     setConnectDevices: async (devices) => {
         connectDevices = devices
     },
+    exportFile: async (data) => await ipcRenderer.invoke('exportFile', data),
+    importFile: async (fn) => await ipcRenderer.invoke('importFile', fn )
 }
 
 process.once('loaded', async () => {
@@ -25,6 +39,31 @@ process.once('loaded', async () => {
             keyboardSendLoop: keyboardSendLoop,
             sendDeviceConfig: async (data) => await command.sendDeviceConfig(data),
             setConnectDevices: (device) => command.setConnectDevices(device),
+            exportFile:  async () => await command.exportFile(connectDevices),
+            importFile: async () => {
+                const dat = await command.importFile()
+                if(dat) {
+                    try {
+                        const json = JSON.parse(dat)
+                        connectDevices = await Promise.all(connectDevices.map(async (cd) => {
+                           const j = json.find((j) =>
+                                j.id === cd.id &&
+                                j.manufacturer === cd.manufacturer &&
+                                j.product === cd.product &&
+                                j.productId === cd.productId &&
+                                j.vendorId === cd.vendorId)
+                           if(j){
+                               await command.sendDeviceConfig(j)
+                               return j
+                           }
+                           return cd
+                       }))
+                       await command.changeConnectDevice(connectDevices)
+                    } catch (e) {
+                        console.log(e)
+                    }
+                }
+            },
             on: (channel, func) => ipcRenderer.on(channel, (event, ...args) => func(...args)),
         })
 })

@@ -1,18 +1,18 @@
-import React, {  useEffect, useRef, useState } from 'react'
+import React, {useEffect} from 'react'
 import Setting from "./renderer/setting"
-import { css } from "@emotion/react";
-
-const {api} = window
-
+import {css} from "@emotion/react";
 import {useStateContext} from "./context"
 import {SettingsPrecautionary} from "./style";
+import SettingFiles from "./renderer/settingFiles";
+
+const {api} = window
 
 const style = css`paddingTop: "40px"`;
 
 const Content = () => {
     const {state, setState} = useStateContext()
 
-    useEffect(  () => {
+    useEffect(() => {
         const intervalId = setInterval(async () => {
             try {
                 await api.keyboardSendLoop();
@@ -28,18 +28,22 @@ const Content = () => {
 
     useEffect(() => {
         api.on("changeConnectDevice", (dat) => {
-            console.log(dat)
             state.devices = dat
             state.init = false
             setState(state)
         })
-        return () => {}
+        return () => {
+        }
     }, [state])
 
     return (
         <div>
             <Setting/>
-            <SettingsPrecautionary sx={{ pt: 2, pl: 4}}>Do not connect while using VIAL and GPK RC</SettingsPrecautionary>
+            <SettingsPrecautionary sx={{pt: 2, pl: 4}}>
+                Do not connect while using VIAL and GPK RC<br />
+                Config Import/Export after device is displayed
+            </SettingsPrecautionary>
+            <SettingFiles/>
         </div>
     )
 }

@@ -1,5 +1,5 @@
-const {app, BrowserWindow, ipcMain, Tray, Menu} = require("electron")
-
+const {app, BrowserWindow, ipcMain, Tray, Menu, dialog} = require("electron")
+const fs = require('fs').promises;
 const {start, stop, close, writeCommand, getConnectKbd, getKBDList, deviceId} = require(`${__dirname}/gpkrc.js`)
 
 let mainWindow
@@ -56,6 +56,43 @@ ipcMain.on("connectDevice", (e, data) => {
 
 const sleep = async (msec) => new Promise(resolve => setTimeout(resolve, msec))
 
+const exportFile = (data) => {
+    dialog.showSaveDialog({
+        title: 'Export Config File',
+        defaultPath: 'gpk_trackpad_settings.json',
+        buttonLabel: 'Save',
+        filters: [
+            { name: 'JSON Files', extensions: ['json'] },
+            { name: 'All Files', extensions: ['*'] }
+        ]
+    }).then(async result  => {
+        if (!result.canceled) {
+            await fs.writeFile(result.filePath, JSON.stringify(data, null, 2))
+        }
+    }).catch(err => {
+        console.error('An error occurred:', err);
+    });
+}
+
+const importFile = async () => {
+    const  result = await dialog.showOpenDialog({
+        title: 'Import Config File',
+        buttonLabel: 'Open',
+        filters: [
+            { name: 'JSON Files', extensions: ['json'] },
+            { name: 'All Files', extensions: ['*'] }
+        ],
+        properties: ['openFile']
+    })
+
+    if (!result.canceled && result.filePaths.length > 0) {
+        const filePath = result.filePaths[0];
+        const file = await fs.readFile(filePath, 'utf-8')
+        return file
+    }
+    return undefined
+}
+
 const  commandId = {
     customSet:  118,
     customGet:  119,
@@ -106,3 +143,5 @@ ipcMain.handle("sendDeviceConfig", async (e, data) => {
     byteArray[5] = (data.config.default_speed & 0b001111) << 4 | data.config.scroll_step
     await writeCommand(data, {id: commandId.customSave, data: byteArray})
 })
+ipcMain.handle('exportFile', async (event, data) => await exportFile(data))
+ipcMain.handle('importFile', async (event, fn) => await importFile(fn))

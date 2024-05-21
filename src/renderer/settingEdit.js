@@ -32,8 +32,6 @@ const SettingEdit = ((props) => {
             }
             return d
         }))
-        console.log("command", dat)
-
         state.devices = dat
         setState(state)
     }
