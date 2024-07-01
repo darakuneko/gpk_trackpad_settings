@@ -31,6 +31,8 @@ const createWindow = () => {
 const doubleBoot = app.requestSingleInstanceLock()
 if (!doubleBoot) app.quit()
 
+app.setName("GPK Trackpad Settings")
+
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         try{
