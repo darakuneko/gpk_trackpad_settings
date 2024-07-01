@@ -84,6 +84,14 @@ let connectDevices = [{
     vendorId: 31353,
     connected: false,
     config: {},
+},{
+    id: "Daraku-Neko-Ieneko38RTR-31353-5456",
+    manufacturer: "Daraku-Neko",
+    product: "Ieneko38RTR",
+    productId: 5456,
+    vendorId: 31353,
+    connected: false,
+    config: {},
 }]
 
 const keyboardSendLoop = async () => {
