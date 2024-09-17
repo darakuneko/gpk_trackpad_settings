@@ -141,6 +141,9 @@ ipcMain.handle("sendDeviceConfig", async (e, data) => {
         lower_default_speed
 
     byteArray[5] = (data.config.default_speed & 0b001111) << 4 | data.config.scroll_step
+
+    byteArray[6] = data.config.can_short_scroll << 7
+
     await writeCommand(data, {id: commandId.customSave, data: byteArray})
 })
 ipcMain.handle('exportFile', async (event, data) => await exportFile(data))

@@ -23,7 +23,9 @@ const SettingEdit = ((props) => {
         const dat = await Promise.all(state.devices.map( async (d) => {
             if(d.id === id) {
                 if(pType === "can_hf_for_layer" || pType === "can_drag"
-                    || pType === "can_trackpad_layer" || pType === "can_reverse_scrolling_direction") {
+                    || pType === "can_trackpad_layer" || pType === "can_reverse_scrolling_direction"
+                    || pType === "can_short_scroll"
+                ) {
                     d.config[pType] = event.target.checked ? 1 : 0
                 } else {
                     d.config[pType] = pType === "default_speed" ? event.target.value * 10 : parseInt(event.target.value)
@@ -81,6 +83,16 @@ const SettingEdit = ((props) => {
                                 />}
                                 labelPlacement="top"
                                 label="Reverse Scrolling Direction"/>
+                        </Box>
+                        <Box sx={{pt: 2, width: 200, textAlign: "center"}}>
+                            <FormControlLabel
+                                control={<Switch
+                                    id="config-can_short_scroll"
+                                    onChange={handleChange("can_short_scroll", device.id)}
+                                    checked={device.config.can_short_scroll === 1}
+                                />}
+                                labelPlacement="top"
+                                label="Short Scroll"/>
                         </Box>
                         <Box sx={{pt: 2, pr: 6, width: 250}}>
                             <InputLabel sx={{textAlign: "center"}}>Scroll Term</InputLabel>

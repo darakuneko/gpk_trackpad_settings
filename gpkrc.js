@@ -2,7 +2,17 @@ const HID = require('node-hid')
 let connectKbd = {}
 let kbd = {}
 
-const parseViaFormat = (command) => command.data ? [0, command.id].concat(command.data) : [0, command.id]
+const PACKET_PADDING = 64
+
+const dataToBytes = (data) =>
+    typeof data === 'string' ? [...data].map(c => c.charCodeAt(0)).concat(0) : data
+
+const commandToBytes = ({ id, data }) => {
+    const bytes = data ? dataToBytes(data) : []
+    const unpadded = [0, id, ...bytes]
+    const padding = Array(PACKET_PADDING - (unpadded.length % PACKET_PADDING)).fill(0)
+    return unpadded.concat(padding)
+}
 
 const DEFAULT_USAGE = {
     usage: 0x61,
@@ -57,7 +67,8 @@ function receiveTrackpadConfig(data) {
         drag_strength_mode: (data[10] & 0b10000000) >> 7,
         drag_strength: (data[10] & 0b01111100) >> 2,
         default_speed: joinDefaultSpeed(data[10], data[11]),
-        scroll_step: data[11] & 0b00001111
+        scroll_step: data[11] & 0b00001111,
+        can_short_scroll: (data[12] & 0b10000000) >> 7
     }
 }
 
@@ -107,7 +118,7 @@ const close = () => {
 
 const writeCommand = async (device, command) => {
     const id = deviceId(device)
-    if (kbd[id]) await kbd[id].write(parseViaFormat(command))
+    if (kbd[id]) await kbd[id].write(commandToBytes(command))
 }
 
 module.exports.getConnectKbd = (id) => connectKbd[id]
