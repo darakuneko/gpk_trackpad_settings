@@ -1,5 +1,5 @@
 # GPK Trackpad Settings
-![gpk_trackpad_settings](https://github.com/darakuneko/gpk_trackpad_settings/assets/5214078/ad6fa9e3-c469-4642-a701-7b5b161d9774)
+<img width="1007" src="https://github.com/user-attachments/assets/9acf0d9b-062b-4fe4-a154-b231047f1c7c">
 
 ## Description
 Configuration Tools for Ieneko38RTR, Ieneko42C, NumNum Bento.
