@@ -1,3 +1,7 @@
+# Notice
+This project has been archived and is no longer maintained.   
+Please refer to the successor project here: [GPK Utility](https://github.com/darakuneko/gpk-utility)
+
 # GPK Trackpad Settings
 <img width="1007" src="https://github.com/user-attachments/assets/9acf0d9b-062b-4fe4-a154-b231047f1c7c">
 
